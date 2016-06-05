@@ -2,6 +2,10 @@
 
 Formatter for [benchee](https://github.com/PragTob/benchee) to turn the statistics output into a CSV file. This can then be used in the Spreadsheet tool of your choice to generate graphs to your liking.
 
+These might then look like this one (quickly generated with LibreOffice from the output of the sample):
+
+![sample graphs](http://www.pragtob.info/images/benchee_csv.png)
+
 ## Installation
 
 Add benchee_csv to your list of dependencies in `mix.exs`:
