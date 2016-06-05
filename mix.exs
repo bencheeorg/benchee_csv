@@ -24,7 +24,9 @@ defmodule BencheeCSV.Mixfile do
   defp deps do
     [
       {:benchee, "~> 0.1"},
-      {:csv,     "~> 1.4.0"}
+      {:csv,     "~> 1.4.0"},
+      {:ex_doc,  "~> 0.11", only: :dev},
+      {:earmark, "~> 0.2",  only: :dev}
     ]
   end
 
