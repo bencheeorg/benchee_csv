@@ -7,7 +7,8 @@ defmodule BencheeCSV.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps
+     deps: deps,
+     package: package,
      name: "BencheeCSV"]
   end
 
@@ -19,6 +20,13 @@ defmodule BencheeCSV.Mixfile do
     [
       {:benchee, path: "../benchee"},
       {:csv,     "~> 1.4.0"}
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Tobias Pfeiffer"],
+      licenses: ["MIT"]
     ]
   end
 end
