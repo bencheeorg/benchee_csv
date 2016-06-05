@@ -1,4 +1,4 @@
-# BencheeCSV
+# BencheeCSV [![Build Status](https://travis-ci.org/PragTob/benchee_csv.svg)](https://travis-ci.org/PragTob/benchee_csv)
 
 Formatter for [benchee](https://github.com/PragTob/benchee) to turn the statistics output into a CSV file. This can then be used in the Spreadsheet tool of your choice to generate graphs to your liking.
 
