@@ -1,4 +1,4 @@
-defmodule BencheeCsv.Mixfile do
+defmodule BencheeCSV.Mixfile do
   use Mix.Project
 
   def project do
@@ -7,7 +7,8 @@ defmodule BencheeCsv.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps
+     name: "BencheeCSV"]
   end
 
   def application do
