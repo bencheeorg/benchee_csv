@@ -9,7 +9,12 @@ defmodule BencheeCSV.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps,
      package: package,
-     name: "BencheeCSV"]
+     name: "BencheeCSV",
+     source_url: "https://github.com/PragTob/benchee_csv",
+     description: """
+     Get CSV from your benchee benchmarks to them into graphs or whatever!
+     """
+   ]
   end
 
   def application do
@@ -26,7 +31,8 @@ defmodule BencheeCSV.Mixfile do
   defp package do
     [
       maintainers: ["Tobias Pfeiffer"],
-      licenses: ["MIT"]
+      licenses: ["MIT"],
+      links: %{github: "https://github.com/PragTob/benchee_csv"}
     ]
   end
 end
