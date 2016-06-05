@@ -1,2 +1,0 @@
-defmodule BencheeCsv do
-end
