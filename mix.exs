@@ -3,7 +3,7 @@ defmodule BencheeCSV.Mixfile do
 
   def project do
     [app: :benchee_csv,
-     version: "0.1.0",
+     version: "0.2.0",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -23,7 +23,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee, "~> 0.1"},
+      {:benchee, "~> 0.2"},
       {:csv,     "~> 1.4.0"},
       {:ex_doc,  "~> 0.11", only: :dev},
       {:earmark, "~> 0.2",  only: :dev}
