@@ -1,4 +1,4 @@
-# BencheeCSV [![Hex Version](https://img.shields.io/hexpm/v/benchee_csv.svg)](https://hex.pm/packages/benchee_csv)[![docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/benchee_csv/)[![Build Status](https://travis-ci.org/PragTob/benchee_csv.svg)](https://travis-ci.org/PragTob/benchee_csv)
+# BencheeCSV [![Hex Version](https://img.shields.io/hexpm/v/benchee_csv.svg)] (https://hex.pm/packages/benchee_csv) [![docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/benchee_csv/) [![Build Status](https://travis-ci.org/PragTob/benchee_csv.svg)](https://travis-ci.org/PragTob/benchee_csv)
 
 Formatter for [benchee](https://github.com/PragTob/benchee) to turn the statistics output into a CSV file. This can then be used in the Spreadsheet tool of your choice to generate graphs to your liking.
 
