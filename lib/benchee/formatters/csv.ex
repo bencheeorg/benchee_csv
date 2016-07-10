@@ -6,6 +6,17 @@ defmodule Benchee.Formatters.CSV do
   generation for instance.
   """
 
+  def output(suite = %{config: %{csv: %{file: file}} }) do
+    file = File.open! file, [:write]
+    suite
+    |> format
+    |> Enum.each(fn(row) -> IO.write(file, row) end)
+  end
+
+  def output(_) do
+    # error out
+  end
+
   @column_descriptors ["Name", "Iterations per Second", "Average",
                        "Standard Deviation",
                        "Standard Deviation Iterations Per Second",
