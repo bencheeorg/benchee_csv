@@ -1,3 +1,9 @@
+# 0.3.0 (July 11, 2016)
+
+## Features
+* `Benchee.Formatters.CSV.output/1` method that formats and writes to a configured file for you
+* Compatibility with Benchee 0.3.0
+
 # 0.2.0 (June 11, 2016)
 
 ## Features
