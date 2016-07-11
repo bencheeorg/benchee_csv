@@ -28,12 +28,13 @@ defmodule Benchee.Formatters.CSV do
   a CSV, but also already writes it to a file defined in the initial
   configuration under `%{csv: %{file: "my.csv"}}`
   """
+  def output(map)
   def output(suite = %{config: %{csv: %{file: file}} }) do
     file = File.open! file, [:write]
     suite
     |> format
     |> Enum.each(fn(row) -> IO.write(file, row) end)
-    
+
     suite
   end
   def output(_suite) do
