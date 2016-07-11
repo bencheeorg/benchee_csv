@@ -34,9 +34,8 @@ defmodule Benchee.Formatters.CSV do
     |> format
     |> Enum.each(fn(row) -> IO.write(file, row) end)
   end
-
-  def output(_) do
-    # error out
+  def output(_suite) do
+    raise "You need to specify a file to write the csv to in the configuration as %{csv: %{file: \"my.csv\"}}"
   end
 
   @column_descriptors ["Name", "Iterations per Second", "Average",

@@ -31,4 +31,19 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
       File.rm! @file_path
     end
   end
+
+  test "errors when no file was specified" do
+    capture_io fn ->
+      assert_raise RuntimeError, fn ->
+        Benchee.run %{
+          time: 0.01,
+          warmup: 0,
+          formatters: [&Benchee.Formatters.CSV.output/1]
+        },
+        %{
+          "Sleep"        => fn -> :timer.sleep(10) end,
+        }
+      end
+    end
+  end
 end
