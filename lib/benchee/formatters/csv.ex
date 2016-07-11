@@ -4,8 +4,30 @@ defmodule Benchee.Formatters.CSV do
   Functionality for converting Benchee benchmarking results to CSV so that
   they can be written to file and opened in a spreadsheet tool for graph
   generation for instance.
+
+  The most basic use case is to configure it as one of the formatters to be
+  used by `Benchee.run/2`.
+
+      Benchee.run(
+        %{
+          formatters: [
+            &Benchee.Formatters.CSV.output/1,
+            &Benchee.Formatters.Console.output/1
+          ],
+          csv: %{file: "my.csv"}
+        },
+        %{
+          "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
+          "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
+        })
+
   """
 
+  @doc """
+  Uses `Benchee.Formatters.CSV.format/1` to transform the statistics output to
+  a CSV, but also already writes it to a file defined in the initial
+  configuration under `%{csv: %{file: "my.csv"}}`
+  """
   def output(suite = %{config: %{csv: %{file: file}} }) do
     file = File.open! file, [:write]
     suite
