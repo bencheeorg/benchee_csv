@@ -33,6 +33,8 @@ defmodule Benchee.Formatters.CSV do
     suite
     |> format
     |> Enum.each(fn(row) -> IO.write(file, row) end)
+    
+    suite
   end
   def output(_suite) do
     raise "You need to specify a file to write the csv to in the configuration as %{csv: %{file: \"my.csv\"}}"
