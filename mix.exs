@@ -1,15 +1,18 @@
 defmodule BencheeCSV.Mixfile do
   use Mix.Project
 
+  @version "0.3.0"
+
   def project do
     [app: :benchee_csv,
-     version: "0.2.0",
+     version: @version,
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps,
      package: package,
      name: "BencheeCSV",
+     docs: [source_ref: @version],
      source_url: "https://github.com/PragTob/benchee_csv",
      description: """
      Get CSV from your benchee benchmarks to them into graphs or whatever!
@@ -23,7 +26,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee, git: "git://github.com/PragTob/benchee.git"},
+      {:benchee, "~> 0.3.0"},
       {:csv,     "~> 1.4.0"},
       {:ex_doc,  "~> 0.11", only: :dev},
       {:earmark, "~> 0.2",  only: :dev}
