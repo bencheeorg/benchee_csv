@@ -11,10 +11,13 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
         formatters: [&Benchee.Formatters.CSV.output/1],
         csv: %{file: @file_path}
       },
-      %{"Sleep" => fn -> :timer.sleep(10) end}
+      %{
+        "Sleep"        => fn -> :timer.sleep(10) end,
+        "Sleep longer" => fn -> :timer.sleep(20) end
+      }
 
       assert File.exists?(@file_path)
-
+      File.rm! @file_path
     end
   end
 end
