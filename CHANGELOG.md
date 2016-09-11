@@ -1,3 +1,7 @@
+# 0.4.0 (September 11, 2016)
+
+Release to make usage with benchee 0.4.0 possible (also relax version requirement)
+
 # 0.3.0 (July 11, 2016)
 
 ## Features

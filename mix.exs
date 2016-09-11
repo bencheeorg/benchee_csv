@@ -1,7 +1,7 @@
 defmodule BencheeCSV.Mixfile do
   use Mix.Project
 
-  @version "0.3.0"
+  @version "0.4.0"
 
   def project do
     [app: :benchee_csv,
@@ -26,7 +26,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee, "~> 0.3.0"},
+      {:benchee, "~> 0.4"},
       {:csv,     "~> 1.4.0"},
       {:ex_doc,  "~> 0.11", only: :dev},
       {:earmark, "~> 0.2",  only: :dev}
