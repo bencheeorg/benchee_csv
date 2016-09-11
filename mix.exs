@@ -29,7 +29,7 @@ defmodule BencheeCSV.Mixfile do
       {:benchee, "~> 0.4"},
       {:csv,     "~> 1.4.0"},
       {:ex_doc,  "~> 0.11", only: :dev},
-      {:earmark, "~> 0.2",  only: :dev}
+      {:earmark, "~> 1.0.1",  only: :dev}
     ]
   end
 
