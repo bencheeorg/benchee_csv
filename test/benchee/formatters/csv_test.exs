@@ -9,14 +9,15 @@ defmodule Benchee.Formatters.CSVTest do
         csv: %{file: @filename}
         },
       statistics: %{
-        "My Job" => %{
-          average: 200.0,
-          ips: 5000.0,
-          std_dev: 20,
-          std_dev_ratio: 0.1,
-          std_dev_ips: 500,
-          median: 190.0
-        }
+        "Some Input" => %{
+          "My Job" => %{
+            average: 200.0,
+            ips: 5000.0,
+            std_dev: 20,
+            std_dev_ratio: 0.1,
+            std_dev_ips: 500,
+            median: 190.0
+          }
       }
     }
 

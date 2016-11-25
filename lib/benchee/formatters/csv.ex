@@ -9,17 +9,16 @@ defmodule Benchee.Formatters.CSV do
   used by `Benchee.run/2`.
 
       Benchee.run(
-        %{
-          formatters: [
-            &Benchee.Formatters.CSV.output/1,
-            &Benchee.Formatters.Console.output/1
-          ],
-          csv: %{file: "my.csv"}
-        },
-        %{
-          "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
-          "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
-        })
+      %{
+        "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
+        "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
+      },
+        formatters: [
+          &Benchee.Formatters.CSV.output/1,
+          &Benchee.Formatters.Console.output/1
+        ],
+        csv: %{file: "my.csv"}
+      )
 
   """
 
@@ -29,16 +28,22 @@ defmodule Benchee.Formatters.CSV do
   configuration under `%{csv: %{file: "my.csv"}}`
   """
   def output(map)
-  def output(suite = %{config: %{csv: %{file: file}} }) do
-    file = File.open! file, [:write]
+  def output(suite = %{config: %{csv: %{file: filename}} }) do
     suite
     |> format
-    |> Enum.each(fn(row) -> IO.write(file, row) end)
+    # per input generate file name and then write that file
+    # Add .csv if not already present
+    |> write_csv_to_file(filename)
 
     suite
   end
   def output(_suite) do
     raise "You need to specify a file to write the csv to in the configuration as %{csv: %{file: \"my.csv\"}}"
+  end
+
+  defp write_csv_to_file(csv_lists, filename) do
+    file = File.open! filename, [:write]
+    Enum.each(csv_lists, fn(row) -> IO.write(file, row) end)
   end
 
   @column_descriptors ["Name", "Iterations per Second", "Average",
@@ -52,7 +57,16 @@ defmodule Benchee.Formatters.CSV do
 
   ## Examples
 
-      iex> suite = %{statistics: %{"My Job" => %{average: 200.0, ips: 5000.0, std_dev: 20, std_dev_ratio: 0.1, std_dev_ips: 500, median: 190.0}}}
+      iex> suite = %{
+      ...>   statistics: %{
+      ...>     "Some Input" =>
+      ...>       "My Job" => %{
+      ...>         average: 200.0,
+      ...>         ips: 5000.0,
+      ...>         std_dev: 20,
+      ...>         std_dev_ratio: 0.1,
+      ...>         std_dev_ips: 500,
+      ...>         median: 190.0}}}
       iex> suite
       iex> |> Benchee.Formatters.CSV.format
       iex> |> Enum.take(2)
@@ -61,6 +75,7 @@ defmodule Benchee.Formatters.CSV do
 
   """
   def format(%{statistics: jobs}) do
+    # deep_map over jobs statistics to get csv format per input
     sorted = Benchee.Statistics.sort(jobs)
     [@column_descriptors | job_csvs(sorted)]
     |> CSV.encode
