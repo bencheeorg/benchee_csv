@@ -6,4 +6,5 @@ erl_crash.dump
 mix.lock
 test.csv
 my.csv
+my_*.csv
 doc/

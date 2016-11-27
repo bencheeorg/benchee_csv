@@ -7,7 +7,7 @@ defmodule Benchee.Utility.FileIntegrationTest do
     try do
       input_to_contents = %{
         "small input" => "abc",
-        "big list"    => "ABC"
+        "Big list"    => "ABC"
       }
       File.mkdir_p! @directory
       filename = "#{@directory}/test.txt"

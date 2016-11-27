@@ -21,10 +21,10 @@ defmodule Benchee.Utility.File do
       "abc_hello.csv"
 
       iex> Benchee.Utility.File.interleave("abc.csv", "Big Input")
-      "abc_Big_Input.csv"
+      "abc_big_input.csv"
 
       iex> Benchee.Utility.File.interleave("bench/abc.csv", "Big Input")
-      "bench/abc_Big_Input.csv"
+      "bench/abc_big_input.csv"
 
       iex> marker = Benchee.Benchmark.no_input
       iex> Benchee.Utility.File.interleave("abc.csv", marker)
@@ -38,7 +38,8 @@ defmodule Benchee.Utility.File do
     no_input = Benchee.Benchmark.no_input
     case input_string do
       ^no_input -> ""
-      _         -> "_" <> String.replace(input_string, " ", "_")
+      _         ->
+        String.downcase("_" <> String.replace(input_string, " ", "_"))
     end
   end
 end
@@ -105,28 +106,36 @@ defmodule Benchee.Formatters.CSV do
 
       iex> suite = %{
       ...>   statistics: %{
-      ...>     "Some Input" =>
+      ...>     "Some Input" => %{
       ...>       "My Job" => %{
       ...>         average: 200.0,
       ...>         ips: 5000.0,
       ...>         std_dev: 20,
       ...>         std_dev_ratio: 0.1,
       ...>         std_dev_ips: 500,
-      ...>         median: 190.0}}}
+      ...>         median: 190.0}
+      ...>       }
+      ...>     }
+      ...>   }
       iex> suite
       iex> |> Benchee.Formatters.CSV.format
+      iex> |> Map.get("Some Input")
       iex> |> Enum.take(2)
       ["Name,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median\\r\\n",
        "My Job,5.0e3,200.0,20,500,0.1,190.0\\r\\n"]
 
   """
   def format(%{statistics: jobs_per_input}) do
-    # deep_map over jobs statistics to get csv format per input
-    Benchee.Utility.MapValues.map_values jobs_per_input, fn(statistics) ->
+    input_to_content = Enum.map(jobs_per_input, fn({input_key, statistics}) ->
+
       sorted = Benchee.Statistics.sort(statistics)
-      [@column_descriptors | job_csvs(sorted)]
-      |> CSV.encode
-    end
+      content = [@column_descriptors | job_csvs(sorted)]
+                |> CSV.encode
+
+      {input_key, content}
+    end)
+
+    Map.new input_to_content
   end
 
   defp job_csvs(jobs) do

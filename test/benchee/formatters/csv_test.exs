@@ -25,8 +25,9 @@ defmodule Benchee.Formatters.CSVTest do
     try do
       return = Benchee.Formatters.CSV.output(suite)
       assert return == suite
+      assert File.exists? "test_some_input.csv"
     after
-      File.rm! @filename
+      File.rm! "test_some_input.csv"
     end
   end
 end
