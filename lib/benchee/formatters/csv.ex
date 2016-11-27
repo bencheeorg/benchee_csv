@@ -1,3 +1,48 @@
+defmodule Benchee.Utility.File do
+  @moduledoc """
+  Methods to create files used in plugins.
+  """
+
+  def each_input(inputs_to_content, filename, function) do
+    Enum.each inputs_to_content, fn({input_name, content}) ->
+      input_filename = interleave(filename, input_name)
+      File.open input_filename, [:write], fn(file) ->
+        function.(file, content)
+      end
+    end
+  end
+
+  @doc """
+  Gets file name/path and the input name together.
+
+  ## Examples
+
+      iex> Benchee.Utility.File.interleave("abc.csv", "hello")
+      "abc_hello.csv"
+
+      iex> Benchee.Utility.File.interleave("abc.csv", "Big Input")
+      "abc_Big_Input.csv"
+
+      iex> Benchee.Utility.File.interleave("bench/abc.csv", "Big Input")
+      "bench/abc_Big_Input.csv"
+
+      iex> marker = Benchee.Benchmark.no_input
+      iex> Benchee.Utility.File.interleave("abc.csv", marker)
+      "abc.csv"
+  """
+  def interleave(filename, input) do
+    Path.rootname(filename) <> to_filename(input) <> Path.extname(filename)
+  end
+
+  defp to_filename(input_string) do
+    no_input = Benchee.Benchmark.no_input
+    case input_string do
+      ^no_input -> ""
+      _         -> "_" <> String.replace(input_string, " ", "_")
+    end
+  end
+end
+
 defmodule Benchee.Formatters.CSV do
 
   @moduledoc """
@@ -31,8 +76,6 @@ defmodule Benchee.Formatters.CSV do
   def output(suite = %{config: %{csv: %{file: filename}} }) do
     suite
     |> format
-    # per input generate file name and then write that file
-    # Add .csv if not already present
     |> write_csv_to_file(filename)
 
     suite
@@ -41,9 +84,12 @@ defmodule Benchee.Formatters.CSV do
     raise "You need to specify a file to write the csv to in the configuration as %{csv: %{file: \"my.csv\"}}"
   end
 
-  defp write_csv_to_file(csv_lists, filename) do
-    file = File.open! filename, [:write]
-    Enum.each(csv_lists, fn(row) -> IO.write(file, row) end)
+  defp write_csv_to_file(input_to_content, filename) do
+    Benchee.Utility.File.each_input input_to_content,
+                                    filename,
+                                    fn(file, csv_list) ->
+      Enum.each(csv_list, fn(row) -> IO.write(file, row) end)
+    end
   end
 
   @column_descriptors ["Name", "Iterations per Second", "Average",
@@ -74,11 +120,13 @@ defmodule Benchee.Formatters.CSV do
        "My Job,5.0e3,200.0,20,500,0.1,190.0\\r\\n"]
 
   """
-  def format(%{statistics: jobs}) do
+  def format(%{statistics: jobs_per_input}) do
     # deep_map over jobs statistics to get csv format per input
-    sorted = Benchee.Statistics.sort(jobs)
-    [@column_descriptors | job_csvs(sorted)]
-    |> CSV.encode
+    Benchee.Utility.MapValues.map_values jobs_per_input, fn(statistics) ->
+      sorted = Benchee.Statistics.sort(statistics)
+      [@column_descriptors | job_csvs(sorted)]
+      |> CSV.encode
+    end
   end
 
   defp job_csvs(jobs) do
