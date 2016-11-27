@@ -96,7 +96,8 @@ defmodule Benchee.Formatters.CSV do
   @column_descriptors ["Name", "Iterations per Second", "Average",
                        "Standard Deviation",
                        "Standard Deviation Iterations Per Second",
-                       "Standard Deviation Ratio", "Median"]
+                       "Standard Deviation Ratio", "Median", "Minimum",
+                       "Maximum", "Sample Size"]
 
   @doc """
   Transforms the statistical results `Benche.statistics` to be written
@@ -113,16 +114,20 @@ defmodule Benchee.Formatters.CSV do
       ...>         std_dev: 20,
       ...>         std_dev_ratio: 0.1,
       ...>         std_dev_ips: 500,
-      ...>         median: 190.0}
+      ...>         median: 190.0,
+      ...>         minimum: 180,
+      ...>         maximum: 250,
+      ...>         sample_size: 243
       ...>       }
       ...>     }
       ...>   }
+      ...> }
       iex> suite
       iex> |> Benchee.Formatters.CSV.format
       iex> |> Map.get("Some Input")
       iex> |> Enum.take(2)
-      ["Name,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median\\r\\n",
-       "My Job,5.0e3,200.0,20,500,0.1,190.0\\r\\n"]
+      ["Name,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median,Minimum,Maximum,Sample Size\\r\\n",
+       "My Job,5.0e3,200.0,20,500,0.1,190.0,180,250,243\\r\\n"]
 
   """
   def format(%{statistics: jobs_per_input}) do
@@ -147,7 +152,11 @@ defmodule Benchee.Formatters.CSV do
                        std_dev:       std_dev,
                        std_dev_ips:   std_dev_ips,
                        std_dev_ratio: std_dev_ratio,
-                       median:        median}}) do
-    [name, ips, average, std_dev, std_dev_ips, std_dev_ratio, median]
+                       median:        median,
+                       minimum:       minimum,
+                       maximum:       maximum,
+                       sample_size:   sample_size}}) do
+    [name, ips, average, std_dev, std_dev_ips, std_dev_ratio, median, minimum,
+    maximum, sample_size]
   end
 end
