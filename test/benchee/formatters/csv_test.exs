@@ -18,6 +18,7 @@ defmodule Benchee.Formatters.CSVTest do
             std_dev_ips: 500,
             median: 190.0
           }
+        }
       }
     }
 

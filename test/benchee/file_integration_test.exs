@@ -6,18 +6,25 @@ defmodule Benchee.Utility.FileIntegrationTest do
   test ".each_input writes file contents just fine" do
     try do
       input_to_contents = %{
-        "small input" => "abc"
+        "small input" => "abc",
         "big list"    => "ABC"
       }
       File.mkdir_p! @directory
-      each_input(input_to_contents, "test.txt", fn(file, content) ->
-        File.write(file, content)
+      filename = "#{@directory}/test.txt"
+      each_input(input_to_contents, filename, fn(file, content) ->
+        :ok = IO.write file, content
       end)
 
-      assert File.read "#{@directory}/test_small_input.txt" == "abc"
-      assert File.read "#{@directory}/test_big_list.txt"    == "ABC"
+      file_name_1 = "#{@directory}/test_small_input.txt"
+      file_name_2 = "#{@directory}/test_big_list.txt"
+
+      assert File.exists? file_name_1
+      assert File.exists? file_name_2
+
+      assert File.read!(file_name_1) == "abc"
+      assert File.read!(file_name_2) == "ABC"
     after
-      File.rm_r! @directory
+      File.rm_rf! @directory
     end
   end
 end
