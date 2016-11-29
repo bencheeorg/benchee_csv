@@ -7,15 +7,13 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
     try do
       capture_io fn ->
         Benchee.run %{
+          "Sleep"        => fn -> :timer.sleep(10) end,
+          "Sleep longer" => fn -> :timer.sleep(20) end
+        },
           time: 0.01,
           warmup: 0.02,
           formatters: [&Benchee.Formatters.CSV.output/1],
           csv: %{file: @file_path}
-        },
-        %{
-          "Sleep"        => fn -> :timer.sleep(10) end,
-          "Sleep longer" => fn -> :timer.sleep(20) end
-        }
 
         assert File.exists?(@file_path)
 

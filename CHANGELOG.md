@@ -4,6 +4,7 @@
 
 * Benchee 0.6.0 compatibility with support for multiple inputs and accordingly generating multiple csv files
 * Supply more statistics - minimum, maximum and sample_size
+* print out information where the file was written to
 
 ## Bugfixes
 

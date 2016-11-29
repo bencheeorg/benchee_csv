@@ -1,5 +1,6 @@
 defmodule Benchee.Formatters.CSVTest do
   use ExUnit.Case
+  import ExUnit.CaptureIO
   doctest Benchee.Formatters.CSV
 
   @filename "test.csv"
@@ -26,10 +27,13 @@ defmodule Benchee.Formatters.CSVTest do
     }
 
     try do
-
-      return = Benchee.Formatters.CSV.output(suite)
-      assert return == suite
+      output = capture_io fn ->
+        return = Benchee.Formatters.CSV.output(suite)
+        assert return == suite
+      end
       assert File.exists?("test_some_input.csv")
+      assert output =~ "test_some_input.csv"
+
     after
       if File.exists?("test_some_input.csv") do
         File.rm!("test_some_input.csv")

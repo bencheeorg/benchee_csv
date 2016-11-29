@@ -40,10 +40,11 @@ defmodule Benchee.Formatters.CSV do
   end
 
   defp write_csv_to_file(input_to_content, filename) do
-    Benchee.Utility.File.each_input input_to_content,
+    Benchee.Utility.FileCreation.each input_to_content,
                                     filename,
-                                    fn(file, csv_list) ->
+                                    fn(file, csv_list, filename) ->
       Enum.each(csv_list, fn(row) -> IO.write(file, row) end)
+      IO.puts "CSV written to #{filename}"
     end
   end
 
