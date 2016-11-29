@@ -5,6 +5,10 @@
 * Benchee 0.6.0 compatibility with support for multiple inputs and accordingly generating multiple csv files
 * Supply more statistics - minimum, maximum and sample_size
 
+## Bugfixes
+
+* Remove 1.4.0-rc.0 warnings
+
 # 0.4.0 (September 11, 2016)
 
 Release to make usage with benchee 0.4.0 possible (also relax version requirement)
