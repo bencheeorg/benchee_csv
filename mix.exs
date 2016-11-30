@@ -26,7 +26,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee, "~> 0.6", git: "git@github.com:PragTob/benchee.git"},
+      {:benchee, "~> 0.6"},
       {:csv,     "~> 1.4.0"},
       {:credo,   "~> 0.5",  only: :dev},
       {:ex_doc,  "~> 0.11", only: :dev},
