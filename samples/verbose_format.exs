@@ -9,4 +9,6 @@ Benchee.init
 |> Benchee.measure
 |> Benchee.statistics
 |> Benchee.Formatters.CSV.format
-|> Enum.each(fn(row) -> IO.write(file, row) end)
+|> Enum.each(fn({_input, content}) ->
+     Enum.each(content, fn(row) -> IO.write(file, row) end)
+   end)

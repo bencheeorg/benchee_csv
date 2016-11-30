@@ -7,10 +7,10 @@ Benchee.run(%{
   "map.flatten" => fn(list) -> list |> Enum.map(map_fun) |> List.flatten end
 },
   formatters: [
-    &Benchee.Formatters.CSV.output/1,
-    &Benchee.Formatters.Console.output/1
+    &Benchee.Formatters.Console.output/1,
+    &Benchee.Formatters.CSV.output/1
   ],
-  csv: [file: "my.csv"],
+  csv: [file: "samples/output/my.csv"],
   inputs: %{
     "Small" => Enum.to_list(1..1_000),
     "Bigger" => Enum.to_list(1..100_000)

@@ -26,37 +26,18 @@ Simply configure `Benchee.Formatters.CSV.output/1` as one of the formatters for 
 list = Enum.to_list(1..10_000)
 map_fun = fn(i) -> [i, i * i] end
 
-Benchee.run(
-  %{
-    formatters: [
-      &Benchee.Formatters.CSV.output/1,
-      &Benchee.Formatters.Console.output/1
-    ],
-    csv: %{file: "my.csv"}
-  },
-  %{
-    "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
-    "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
-  })
+Benchee.run(%{
+  "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
+  "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
+},
+  formatters: [
+    &Benchee.Formatters.CSV.output/1,
+    &Benchee.Formatters.Console.output/1
+  ],
+  csv: [file: "my.csv"])
+
 ```
 
 The sample defines both the standard console formatter and the CSV formatter, if you don't care about the console output you can also only define the CSV formatter.
 
-You can also use the more verbose and versatile API of Benchee. When it comes to formatting just use `Benchee.Formatters.CSV.format` and then write it to a file. Here is an example:
-
-```elixir
-file = File.open!("test.csv", [:write])
-list = Enum.to_list(1..10_000)
-map_fun = fn(i) -> [i, i * i] end
-
-Benchee.init
-|> Benchee.benchmark("flat_map", fn -> Enum.flat_map(list, map_fun) end)
-|> Benchee.benchmark("map.flatten",
-                     fn -> list |> Enum.map(map_fun) |> List.flatten end)
-|> Benchee.measure
-|> Benchee.statistics
-|> Benchee.Formatters.CSV.format
-|> Enum.each(fn(row) -> IO.write(file, row) end)
-```
-
-Of course you can also pass in the `%{csv: %{file: "test.csv"}}` option and then use `Benchee.Formatters.CSV.output/1`.
+You can also use the more verbose and versatile API of Benchee. When it comes to formatting just use `Benchee.Formatters.CSV.format` and then write it to a file (taking into account the new input structure). Check out the [samples directory](https://github.com/PragTob/benchee_csv/tree/master/samples) for the verbose samples to see how it's done.
