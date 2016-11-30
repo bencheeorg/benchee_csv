@@ -1,4 +1,6 @@
-# 0.5.0 (unreleased)
+# 0.5.0 (November 30, 2016)
+
+Mainly Benchee 0.6.0 compatibility, support for multiple inputs and MOARE statistics.
 
 ## Features
 
