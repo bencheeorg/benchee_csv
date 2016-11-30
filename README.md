@@ -41,3 +41,24 @@ Benchee.run(%{
 The sample defines both the standard console formatter and the CSV formatter, if you don't care about the console output you can also only define the CSV formatter.
 
 You can also use the more verbose and versatile API of Benchee. When it comes to formatting just use `Benchee.Formatters.CSV.format` and then write it to a file (taking into account the new input structure). Check out the [samples directory](https://github.com/PragTob/benchee_csv/tree/master/samples) for the verbose samples to see how it's done.
+
+## Contributing
+
+Contributions to benchee_csv are very welcome! Bug reports, documentation, spelling corrections, whole features, feature ideas, bugfixes, new plugins, fancy graphics... all of those (and probably more) are much appreciated contributions!
+
+Please respect the [Code of Conduct](//github.com/PragTob/benchee_csv/blob/master/CODE_OF_CONDUCT.md).
+
+You can get started with a look at the [open issues](https://github.com/PragTob/benchee_csv/issues).
+
+A couple of (hopefully) helpful points:
+
+* Feel free to ask for help and guidance on an issue/PR ("How can I implement this?", "How could I test this?", ...)
+* Feel free to open early/not yet complete pull requests to get some early feedback
+* When in doubt if something is a good idea open an issue first to discuss it
+* In case I don't respond feel free to bump the issue/PR or ping me on other places
+
+## Development
+
+* `mix deps.get` to install dependencies
+* `mix test` to run tests
+* `mix credo` or `mix credo --strict` to find code style problems (not too strict with the 80 width limit for sample output in the docs)
