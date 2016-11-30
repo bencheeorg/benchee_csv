@@ -74,7 +74,7 @@ defmodule Benchee.Formatters.CSV do
   configuration under `%{csv: %{file: "my.csv"}}`
   """
   def output(map)
-  def output(suite = %{config: %{csv: %{file: filename}} }) do
+  def output(suite = %{config: %{csv: %{file: filename}}}) do
     suite
     |> format
     |> write_csv_to_file(filename)
