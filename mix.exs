@@ -11,6 +11,11 @@ defmodule BencheeCSV.Mixfile do
      start_permanent: Mix.env == :prod,
      deps: deps(),
      package: package(),
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: [
+        "coveralls": :test, "coveralls.detail": :test,
+        "coveralls.post": :test, "coveralls.html": :test,
+        "coveralls.travis": :test],
      name: "BencheeCSV",
      docs: [source_ref: @version],
      source_url: "https://github.com/PragTob/benchee_csv",
@@ -26,11 +31,12 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee, "~> 0.6"},
-      {:csv,     "~> 1.4.0"},
-      {:credo,   "~> 0.5",  only: :dev},
-      {:ex_doc,  "~> 0.11", only: :dev},
-      {:earmark, "~> 1.0.1",  only: :dev}
+      {:benchee,     "~> 0.6"},
+      {:csv,         "~> 1.4.0"},
+      {:excoveralls, "~> 0.6.1",  only: :test},
+      {:credo,       "~> 0.5",    only: :dev},
+      {:ex_doc,      "~> 0.11",   only: :dev},
+      {:earmark,     "~> 1.0.1",  only: :dev}
     ]
   end
 
