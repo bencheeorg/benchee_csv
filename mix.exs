@@ -26,7 +26,7 @@ defmodule BencheeCSV.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :benchee, :csv]]
   end
 
   defp deps do
@@ -36,7 +36,8 @@ defmodule BencheeCSV.Mixfile do
       {:excoveralls, "~> 0.6.1",  only: :test},
       {:credo,       "~> 0.5",    only: :dev},
       {:ex_doc,      "~> 0.11",   only: :dev},
-      {:earmark,     "~> 1.0.1",  only: :dev}
+      {:earmark,     "~> 1.0.1",  only: :dev},
+      {:dialyxir,       "~> 0.5",   only: :dev, runtime: false}
     ]
   end
 
