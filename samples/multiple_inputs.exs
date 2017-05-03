@@ -10,7 +10,7 @@ Benchee.run(%{
     &Benchee.Formatters.Console.output/1,
     &Benchee.Formatters.CSV.output/1
   ],
-  csv: [file: "samples/output/my.csv"],
+  formatter_options: [csv: [file: "samples/output/my.csv"]],
   inputs: %{
     "Small" => Enum.to_list(1..1_000),
     "Bigger" => Enum.to_list(1..100_000)

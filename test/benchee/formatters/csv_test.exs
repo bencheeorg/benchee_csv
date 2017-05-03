@@ -6,9 +6,9 @@ defmodule Benchee.Formatters.CSVTest do
   @filename "test.csv"
   test ".output returns the suite again unchanged" do
     suite = %{
-      config: %{
-        csv: %{file: @filename}
-        },
+      configuration: %{
+        formatter_options: %{csv: %{file: @filename}}
+      },
       statistics: %{
         "Some Input" => %{
           "My Job" => %{

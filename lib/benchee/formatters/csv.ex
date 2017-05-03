@@ -25,10 +25,12 @@ defmodule Benchee.Formatters.CSV do
   @doc """
   Uses `Benchee.Formatters.CSV.format/1` to transform the statistics output to
   a CSV, but also already writes it to a file defined in the initial
-  configuration under `%{csv: %{file: "my.csv"}}`
+  configuration under `[formatter_options: [csv: [file: \"my.csv\"]]`
   """
-  def output(map)
-  def output(suite = %{config: %{csv: %{file: filename}}}) do
+  @spec output(Benchee.Suite.t) :: Benchee.Suite.t
+  def output(suite)
+  def output(suite = %{configuration:
+              %{formatter_options: %{csv: %{file: filename}}}}) do
     suite
     |> format
     |> write_csv_to_file(filename)
@@ -36,7 +38,7 @@ defmodule Benchee.Formatters.CSV do
     suite
   end
   def output(_suite) do
-    raise "You need to specify a file to write the csv to in the configuration as %{csv: %{file: \"my.csv\"}}"
+    raise "You need to specify a file to write the csv to in the configuration as [formatter_options: [csv: [file: \"my.csv\"]]"
   end
 
   defp write_csv_to_file(input_to_content, filename) do
@@ -85,6 +87,7 @@ defmodule Benchee.Formatters.CSV do
        "My Job,5.0e3,200.0,20,500,0.1,190.0,180,250,243\\r\\n"]
 
   """
+  @spec format(Benchee.Suite.t) :: %{Benchee.Suite.key => String.t}
   def format(%{statistics: jobs_per_input}) do
     input_to_content = Enum.map(jobs_per_input, fn({input_key, statistics}) ->
 
