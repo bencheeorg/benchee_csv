@@ -4,16 +4,27 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
 
   @file_path "test.csv"
   test "works just fine" do
+    basic_test(time: 0.01,
+               warmup: 0.02,
+               formatters: [&Benchee.Formatters.CSV.output/1],
+               formatter_options: [csv: [file: @file_path]])
+  end
+
+  test "old school configuration still works" do
+    basic_test(time: 0.01,
+               warmup: 0.02,
+               formatters: [&Benchee.Formatters.CSV.output/1],
+               csv: [file: @file_path])
+  end
+
+  defp basic_test(configuration) do
     try do
       capture_io fn ->
         Benchee.run %{
           "Sleep"        => fn -> :timer.sleep(10) end,
           "Sleep longer" => fn -> :timer.sleep(20) end
-        },
-          time: 0.01,
-          warmup: 0.02,
-          formatters: [&Benchee.Formatters.CSV.output/1],
-          csv: %{file: @file_path}
+        }, configuration
+
 
         assert File.exists?(@file_path)
 
@@ -26,7 +37,7 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
         assert first_header == "Name"
       end
     after
-      File.rm! @file_path
+      if File.exists?(@file_path), do: File.rm!(@file_path)
     end
   end
 
