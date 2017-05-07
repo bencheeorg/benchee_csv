@@ -17,7 +17,7 @@ defmodule Benchee.Formatters.CSV do
           &Benchee.Formatters.CSV.output/1,
           &Benchee.Formatters.Console.output/1
         ],
-        csv: %{file: "my.csv"}
+        formatter_options: [csv: %[file: "my.csv"]]
       )
 
   """
