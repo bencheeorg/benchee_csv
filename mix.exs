@@ -20,7 +20,7 @@ defmodule BencheeCSV.Mixfile do
      docs: [source_ref: @version],
      source_url: "https://github.com/PragTob/benchee_csv",
      description: """
-     Get CSV from your benchee benchmarks to them into graphs or whatever!
+     Get CSV from your benchee benchmarks to turn them into graphs or whatever!
      """
    ]
   end
@@ -31,7 +31,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee,     "~> 0.8"},
+      {:benchee,     github: "PragTob/benchee", branch: "master"},
       {:csv,         "~> 1.4.0"},
       {:excoveralls, "~> 0.6.1", only: :test},
       {:credo,       "~> 0.5",   only: :dev},
