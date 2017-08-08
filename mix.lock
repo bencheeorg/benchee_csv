@@ -1,4 +1,4 @@
-%{"benchee": {:hex, :benchee, "0.8.0", "fe93506d05252ad82d72257f6549aab11664088a1307f26f0ab1acb172b8c35b", [:mix], [{:deep_merge, "~> 0.1", [hex: :deep_merge, optional: false]}]},
+%{"benchee": {:git, "https://github.com/PragTob/benchee.git", "ccb60384339cb793ff88db58f864a7f8fdbdf4ec", [branch: "master"]},
   "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], []},
   "certifi": {:hex, :certifi, "1.1.0", "c9b71a547016c2528a590ccfc28de786c7edb74aafa17446b84f54e04efc00ee", [:rebar3], []},
   "credo": {:hex, :credo, "0.6.1", "a941e2591bd2bd2055dc92b810c174650b40b8290459c89a835af9d59ac4a5f8", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, optional: false]}]},
