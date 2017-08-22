@@ -88,7 +88,7 @@ defmodule Benchee.Formatters.CSV do
        "My Job,Some Input,2.0e3,500.0,200.0,800.0,0.4,450.0,200,900,8\\r\\n"]
 
   """
-  @spec format(Suite.t) :: %{Suite.key => String.t}
+  @spec format(Suite.t) :: Enumerable.t
   def format(%Suite{scenarios: scenarios}) do
     scenarios
     |> Enum.sort_by(fn(scenario) -> scenario.input_name end)
