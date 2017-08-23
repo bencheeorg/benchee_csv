@@ -1,3 +1,10 @@
+# 0.7.0 (unreleased)
+
+## Features
+
+* Benchee 0.10.0 compatibility
+* All inputs and job name combination in one file again, so you can do whatever magic you desire with the CSV :)
+
 # 0.6.0 (2017-05-07)
 
 Benchee 0.8.0 compatibility and basic type specs.
