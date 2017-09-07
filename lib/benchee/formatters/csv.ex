@@ -1,5 +1,7 @@
 defmodule Benchee.Formatters.CSV do
 
+  @behaviour Benchee.Formatter
+
   alias Benchee.{Suite, Configuration, Statistics, Benchmark.Scenario}
 
   @moduledoc """
@@ -30,25 +32,16 @@ defmodule Benchee.Formatters.CSV do
   configuration under `[formatter_options: [csv: [file: \"my.csv\"]]`
   """
   @spec output(Suite.t) :: Suite.t
-  def output(suite)
   def output(suite = %Suite{configuration:
-              %Configuration{formatter_options: %{csv: %{file: filename}}}}) do
+              %Configuration{formatter_options: %{csv: %{file: _}}}}) do
     suite
     |> format
-    |> write_csv_to_file(filename)
+    |> write
 
     suite
   end
   def output(_suite) do
     raise "You need to specify a file to write the csv to in the configuration as [formatter_options: [csv: [file: \"my.csv\"]]"
-  end
-
-  defp write_csv_to_file(content, filename) do
-    File.open filename, [:write, :utf8], fn(file) ->
-      Enum.each(content, fn(row) -> IO.write(file, row) end)
-    end
-
-    IO.puts "CSV written to #{filename}"
   end
 
   @doc """
@@ -83,18 +76,29 @@ defmodule Benchee.Formatters.CSV do
       ...> }
       iex> suite
       iex> |> Benchee.Formatters.CSV.format
-      iex> |> Enum.take(2)
+      iex> |> (fn({rows, _}) -> Enum.take(rows, 2) end).()
       ["Name,Input,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median,Minimum,Maximum,Sample Size\\r\\n",
        "My Job,Some Input,2.0e3,500.0,200.0,800.0,0.4,450.0,200,900,8\\r\\n"]
 
   """
-  @spec format(Suite.t) :: Enumerable.t
-  def format(%Suite{scenarios: scenarios}) do
-    scenarios
-    |> Enum.sort_by(fn(scenario) -> scenario.input_name end)
-    |> Enum.map(&to_csv/1)
-    |> add_headers
-    |> CSV.encode()
+  @spec format(Suite.t) :: {Enumerable.t, String.t}
+  def format(%Suite{scenarios: scenarios, configuration:
+               %Configuration{formatter_options: %{csv: %{file: filename}}}}) do
+    rows = scenarios
+           |> Enum.sort_by(fn(scenario) -> scenario.input_name end)
+           |> Enum.map(&to_csv/1)
+           |> add_headers
+           |> CSV.encode()
+    {rows, filename}
+  end
+
+  @spec write({Enumerable.t, String.t}) :: :ok
+  def write({content, filename}) do
+    File.open filename, [:write, :utf8], fn(file) ->
+      Enum.each(content, fn(row) -> IO.write(file, row) end)
+    end
+
+    IO.puts "CSV written to #{filename}"
   end
 
   @column_descriptors ["Name", "Input", "Iterations per Second", "Average",
