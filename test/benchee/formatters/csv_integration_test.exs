@@ -2,22 +2,32 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
 
-  @file_path "test.csv"
   test "works just fine" do
-    basic_test(time: 0.01,
+    filename = "test.csv"
+    basic_test(filename, 
+               time: 0.01,
                warmup: 0.02,
                formatters: [&Benchee.Formatters.CSV.output/1],
-               formatter_options: [csv: [file: @file_path]])
+               formatter_options: [csv: [file: filename]])
+  end
+
+  test "works just fine when filename is not specified" do
+    basic_test("benchmark_output.csv", 
+               time: 0.01,
+               warmup: 0.02,
+               formatters: [&Benchee.Formatters.CSV.output/1])
   end
 
   test "old school configuration still works" do
-    basic_test(time: 0.01,
+    filename = "test.csv"
+    basic_test(filename, 
+               time: 0.01,
                warmup: 0.02,
                formatters: [&Benchee.Formatters.CSV.output/1],
-               csv: [file: @file_path])
+               csv: [file: filename])
   end
 
-  defp basic_test(configuration) do
+  defp basic_test(filename, configuration) do
     try do
       capture_io fn ->
         Benchee.run %{
@@ -26,9 +36,9 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
         }, configuration
 
 
-        assert File.exists?(@file_path)
+        assert File.exists?(filename)
 
-        [header, _row_1, _row_2] = @file_path
+        [header, _row_1, _row_2] = filename
                                  |> File.stream!
                                  |> CSV.decode
                                  |> Enum.take(3)
@@ -37,22 +47,7 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
         assert first_header == "Name"
       end
     after
-      if File.exists?(@file_path), do: File.rm!(@file_path)
-    end
-  end
-
-  test "errors when no file was specified" do
-    capture_io fn ->
-      assert_raise RuntimeError, fn ->
-        Benchee.run %{
-          time: 0.01,
-          warmup: 0,
-          formatters: [&Benchee.Formatters.CSV.output/1]
-        },
-        %{
-          "Sleep"        => fn -> :timer.sleep(10) end,
-        }
-      end
+      if File.exists?(filename), do: File.rm!(filename)
     end
   end
 end

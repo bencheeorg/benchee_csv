@@ -29,19 +29,16 @@ defmodule Benchee.Formatters.CSV do
   @doc """
   Uses `Benchee.Formatters.CSV.format/1` to transform the statistics output to
   a CSV, but also already writes it to a file defined in the initial
-  configuration under `[formatter_options: [csv: [file: \"my.csv\"]]`
+  configuration under `[formatter_options: [csv: [file: \"my.csv\"]].
+  If file is not defined then output is going to be placed in : "benchmark_output.csv".
   """
   @spec output(Suite.t) :: Suite.t
-  def output(suite = %Suite{configuration:
-              %Configuration{formatter_options: %{csv: %{file: _}}}}) do
+  def output(suite) do
     suite
     |> format
     |> write
 
     suite
-  end
-  def output(_suite) do
-    raise "You need to specify a file to write the csv to in the configuration as [formatter_options: [csv: [file: \"my.csv\"]]"
   end
 
   @doc """
@@ -82,15 +79,18 @@ defmodule Benchee.Formatters.CSV do
 
   """
   @spec format(Suite.t) :: {Enumerable.t, String.t}
-  def format(%Suite{scenarios: scenarios, configuration:
-               %Configuration{formatter_options: %{csv: %{file: filename}}}}) do
+  def format(%Suite{scenarios: scenarios, configuration: configuration}) do
     rows = scenarios
            |> Enum.sort_by(fn(scenario) -> scenario.input_name end)
            |> Enum.map(&to_csv/1)
            |> add_headers
            |> CSV.encode()
-    {rows, filename}
+    {rows, get_filename(configuration)}
   end
+
+  @default_filename "benchmark_output.csv"
+  defp get_filename(%Configuration{formatter_options: %{csv: %{file: filename}}}), do: filename
+  defp get_filename(_configuration), do: @default_filename 
 
   @spec write({Enumerable.t, String.t}) :: :ok
   def write({content, filename}) do
