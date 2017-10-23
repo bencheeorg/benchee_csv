@@ -7,8 +7,8 @@ Benchee.run(%{
   "map.flatten" => fn(list) -> list |> Enum.map(map_fun) |> List.flatten end
 },
   formatters: [
-    &Benchee.Formatters.Console.output/1,
-    &Benchee.Formatters.CSV.output/1
+    Benchee.Formatters.Console,
+    Benchee.Formatters.CSV
   ],
   formatter_options: [csv: [file: "samples/output/my.csv"]],
   inputs: %{

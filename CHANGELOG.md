@@ -4,6 +4,7 @@
 
 * Benchee 0.10.0 compatibility
 * All inputs and job name combination in one file again, so you can do whatever magic you desire with the CSV :)
+* You can now specify the formatter as just `Benchee.Formatters.CSV`
 
 # 0.6.0 (2017-05-07)
 
