@@ -1,6 +1,5 @@
 defmodule Benchee.Formatters.CSV do
-
-  @behaviour Benchee.Formatter
+  use Benchee.Formatter
 
   alias Benchee.{Suite, Configuration, Statistics, Benchmark.Scenario}
 
@@ -25,21 +24,6 @@ defmodule Benchee.Formatters.CSV do
       )
 
   """
-
-  @doc """
-  Uses `Benchee.Formatters.CSV.format/1` to transform the statistics output to
-  a CSV, but also already writes it to a file defined in the initial
-  configuration under `[formatter_options: [csv: [file: \"my.csv\"]].
-  If file is not defined then output is going to be placed in : "benchmark_output.csv".
-  """
-  @spec output(Suite.t) :: Suite.t
-  def output(suite) do
-    suite
-    |> format
-    |> write
-
-    suite
-  end
 
   @doc """
   Transforms the statistical results `Benche.statistics` to be written
@@ -90,8 +74,15 @@ defmodule Benchee.Formatters.CSV do
 
   @default_filename "benchmark_output.csv"
   defp get_filename(%Configuration{formatter_options: %{csv: %{file: filename}}}), do: filename
-  defp get_filename(_configuration), do: @default_filename 
+  defp get_filename(_configuration), do: @default_filename
 
+  @doc """
+  Uses the return value of `Benchee.Formatters.CSV.format/1` to write the
+  statistics output to a CSV file, defined in the initial
+  configuration under `[formatter_options: [csv: [file: \"my.csv\"]].
+  If file is not defined then output is going to be placed in
+  "benchmark_output.csv".
+  """
   @spec write({Enumerable.t, String.t}) :: :ok
   def write({content, filename}) do
     File.open filename, [:write, :utf8], fn(file) ->

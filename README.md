@@ -31,8 +31,8 @@ Benchee.run(%{
   "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
 },
   formatters: [
-    &Benchee.Formatters.CSV.output/1,
-    &Benchee.Formatters.Console.output/1
+    Benchee.Formatters.CSV,
+    Benchee.Formatters.Console
   ],
   formatter_options: [csv: [file: "my.csv"]])
 
