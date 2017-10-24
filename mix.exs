@@ -1,7 +1,7 @@
 defmodule BencheeCSV.Mixfile do
   use Mix.Project
 
-  @version "0.6.0"
+  @version "0.7.0"
 
   def project do
     [app: :benchee_csv,
@@ -31,7 +31,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee,     github: "PragTob/benchee", branch: "master"},
+      {:benchee,     "~> 0.10"},
       {:csv,         "~> 1.4.0"},
       {:excoveralls, "~> 0.6.1", only: :test},
       {:credo,       "~> 0.5",   only: :dev},

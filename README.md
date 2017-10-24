@@ -12,7 +12,7 @@ Add benchee_csv to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:benchee_csv, "~> 0.5", only: :dev}]
+  [{:benchee_csv, "~> 0.7", only: :dev}]
 end
 ```
 
