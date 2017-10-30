@@ -3,6 +3,8 @@ defmodule Benchee.Formatters.CSV.GeneralTest do
   alias Benchee.Formatters.CSV.General
   alias Benchee.{Benchmark.Scenario}
 
+  doctest Benchee.Formatters.CSV.General
+
   test "Adds headers to scenarios" do
     headers = [["Name", "Input", "Iterations per Second", "Average",
               "Standard Deviation", "Standard Deviation Iterations Per Second",
