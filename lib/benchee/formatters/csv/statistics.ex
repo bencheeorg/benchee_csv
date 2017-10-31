@@ -1,4 +1,4 @@
-defmodule Benchee.Formatters.CSV.General do
+defmodule Benchee.Formatters.CSV.Statistics do
   alias Benchee.{Statistics, Benchmark.Scenario}
 
   @column_descriptors ["Name", "Input", "Iterations per Second", "Average",
@@ -7,25 +7,27 @@ defmodule Benchee.Formatters.CSV.General do
                        "Standard Deviation Ratio", "Median", "Minimum",
                        "Maximum", "Sample Size"]
   @moduledoc """
-    Functionality for converting Benchee scenarios to general csv.
+    Functionality for converting Benchee scenarios to csv with statistics.
   """
 
   @doc """
-    Adds headers to given scenarios.
+    Adds headers to given measurements.
 
     ## Examples
-      iex> Benchee.Formatters.CSV.General.add_headers([])
-      [["Name", "Input", "Iterations per Second", "Average", "Standard Deviation", "Standard Deviation Iterations Per Second", "Standard Deviation Ratio", "Median", "Minimum", "Maximum", "Sample Size"]]
+      iex> Benchee.Formatters.CSV.Statistics.add_headers([])
+      [["Name", "Input", "Iterations per Second", "Average", "Standard Deviation",
+      "Standard Deviation Iterations Per Second", "Standard Deviation Ratio",
+      "Median", "Minimum", "Maximum", "Sample Size"]]
   """
-  def add_headers(scenarios) do
-    [@column_descriptors | scenarios]
+  def add_headers(measurements) do
+    [@column_descriptors | measurements]
   end
 
   @doc """
     Converts scenario to csv.
 
     ## Examples
-      iex> Benchee.Formatters.CSV.General.to_csv(%Scenario{
+      iex> Benchee.Formatters.CSV.Statistics.to_csv(%Benchee.Benchmark.Scenario{
       ...>  input_name: "Some Input",
       ...>  job_name: "My Job",
       ...>  run_time_statistics: %Benchee.Statistics{

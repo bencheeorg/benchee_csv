@@ -1,10 +1,10 @@
 defmodule Benchee.Formatters.CSV do
   use Benchee.Formatter
 
+  alias Benchee.Utility.FileCreation
   alias Benchee.{Suite, Configuration}
-  alias Benchee.Formatters.CSV.{General, Raw}
+  alias Benchee.Formatters.CSV.{Statistics, Raw}
 
-  @raw_benchmark_output "raw_benchmark_output.csv"
   @moduledoc """
   Functionality for converting Benchee benchmarking results to CSV so that
   they can be written to file and opened in a spreadsheet tool for graph
@@ -68,21 +68,26 @@ defmodule Benchee.Formatters.CSV do
   @spec format(Suite.t) :: [{Enumerable.t, String.t}]
   def format(%Suite{scenarios: scenarios, configuration: configuration}) do
     sorted_scenarios = Enum.sort_by(scenarios, fn(scenario) -> scenario.input_name end)
+    filename = get_filename(configuration)
 
     [
-      {get_general_benchmarks(sorted_scenarios), get_filename(configuration)},
-      {get_raw_benchmarks(sorted_scenarios), @raw_benchmark_output}
+      {get_benchmarks_statistics(sorted_scenarios), filename},
+      {get_benchmarks_raw(sorted_scenarios), FileCreation.interleave(filename, "raw")}
     ]
   end
 
-  defp get_general_benchmarks(scenarios), do: get_benchmarks(scenarios, &General.to_csv/1, &General.add_headers/1)
-  defp get_raw_benchmarks(scenarios), do: get_benchmarks(scenarios, &Raw.to_csv/1, &Raw.add_headers/1)
-
-  defp get_benchmarks(scenarios, to_csv, add_headers) do
+  defp get_benchmarks_statistics(scenarios) do
     scenarios
-           |> Enum.map(to_csv)
-           |> add_headers.()
-           |> CSV.encode()
+    |> Enum.map(&Statistics.to_csv/1)
+    |> Statistics.add_headers()
+    |> CSV.encode()
+  end
+
+  defp get_benchmarks_raw(scenarios) do
+    scenarios
+    |> Enum.map(&Raw.to_csv/1)
+    |> Raw.add_headers(Raw.get_biggest_sample_size(scenarios))
+    |> CSV.encode()
   end
 
   @default_filename "benchmark_output.csv"
