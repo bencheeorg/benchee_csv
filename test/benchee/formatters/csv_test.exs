@@ -1,9 +1,14 @@
 defmodule Benchee.Formatters.CSVTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
-  doctest Benchee.Formatters.CSV
 
-  @filename "test.csv"
+  doctest Benchee.Formatters.CSV
+  doctest Benchee.Formatters.CSV.Statistics
+  doctest Benchee.Formatters.CSV.Raw
+
+  @benchmarks "test.csv"
+  @raw_benchmark "test_raw.csv"
+
   test ".output returns the suite again unchanged" do
     suite = %Benchee.Suite{
       scenarios: [
@@ -26,7 +31,7 @@ defmodule Benchee.Formatters.CSVTest do
         }
       ],
       configuration: %Benchee.Configuration{
-        formatter_options: %{csv: %{file: @filename}}
+        formatter_options: %{csv: %{file: @benchmarks}}
       }
     }
 
@@ -35,13 +40,15 @@ defmodule Benchee.Formatters.CSVTest do
         return = Benchee.Formatters.CSV.output(suite)
         assert return == suite
       end
-      assert File.exists?(@filename)
-      assert output =~ @filename
 
+      assert File.exists?(@benchmarks)
+      assert File.exists?(@raw_benchmark)
+
+      assert output =~ @benchmarks
+      assert output =~ @raw_benchmark
     after
-      if File.exists?(@filename) do
-        File.rm!(@filename)
-      end
+      if File.exists?(@benchmarks), do: File.rm!(@benchmarks)
+      if File.exists?(@raw_benchmark), do: File.rm!(@raw_benchmark)
     end
   end
 end

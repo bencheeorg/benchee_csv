@@ -1,7 +1,9 @@
 defmodule Benchee.Formatters.CSV do
   use Benchee.Formatter
 
-  alias Benchee.{Suite, Configuration, Statistics, Benchmark.Scenario}
+  alias Benchee.Utility.FileCreation
+  alias Benchee.{Suite, Configuration}
+  alias Benchee.Formatters.CSV.{Statistics, Raw}
 
   @moduledoc """
   Functionality for converting Benchee benchmarking results to CSV so that
@@ -57,19 +59,35 @@ defmodule Benchee.Formatters.CSV do
       ...> }
       iex> suite
       iex> |> Benchee.Formatters.CSV.format
+      iex> |> Enum.fetch!(0)
       iex> |> (fn({rows, _}) -> Enum.take(rows, 2) end).()
       ["Name,Input,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median,Minimum,Maximum,Sample Size\\r\\n",
        "My Job,Some Input,2.0e3,500.0,200.0,800.0,0.4,450.0,200,900,8\\r\\n"]
 
   """
-  @spec format(Suite.t) :: {Enumerable.t, String.t}
+  @spec format(Suite.t) :: [{Enumerable.t, String.t}]
   def format(%Suite{scenarios: scenarios, configuration: configuration}) do
-    rows = scenarios
-           |> Enum.sort_by(fn(scenario) -> scenario.input_name end)
-           |> Enum.map(&to_csv/1)
-           |> add_headers
-           |> CSV.encode()
-    {rows, get_filename(configuration)}
+    sorted_scenarios = Enum.sort_by(scenarios, fn(scenario) -> scenario.input_name end)
+    filename = get_filename(configuration)
+
+    [
+      {get_benchmarks_statistics(sorted_scenarios), filename},
+      {get_benchmarks_raw(sorted_scenarios), FileCreation.interleave(filename, "raw")}
+    ]
+  end
+
+  defp get_benchmarks_statistics(scenarios) do
+    scenarios
+    |> Enum.map(&Statistics.to_csv/1)
+    |> Statistics.add_headers()
+    |> CSV.encode()
+  end
+
+  defp get_benchmarks_raw(scenarios) do
+    scenarios
+    |> Enum.map(&Raw.to_csv/1)
+    |> Raw.add_headers(Raw.get_biggest_sample_size(scenarios))
+    |> CSV.encode()
   end
 
   @default_filename "benchmark_output.csv"
@@ -81,40 +99,18 @@ defmodule Benchee.Formatters.CSV do
   statistics output to a CSV file, defined in the initial
   configuration under `[formatter_options: [csv: [file: \"my.csv\"]].
   If file is not defined then output is going to be placed in
-  "benchmark_output.csv".
+  "benchmark_output.csv". All raw measurements are placed in raw_benchmark_output.csv.
   """
-  @spec write({Enumerable.t, String.t}) :: :ok
-  def write({content, filename}) do
+  @spec write([{Enumerable.t, String.t}]) :: :ok
+  def write(benchmarks) do
+    Enum.each(benchmarks, fn({content, filename}) -> write(content, filename) end)
+  end
+
+  defp write(content, filename) do
     File.open filename, [:write, :utf8], fn(file) ->
       Enum.each(content, fn(row) -> IO.write(file, row) end)
     end
 
     IO.puts "CSV written to #{filename}"
-  end
-
-  @column_descriptors ["Name", "Input", "Iterations per Second", "Average",
-                       "Standard Deviation",
-                       "Standard Deviation Iterations Per Second",
-                       "Standard Deviation Ratio", "Median", "Minimum",
-                       "Maximum", "Sample Size"]
-  defp add_headers(scenarios) do
-    [@column_descriptors | scenarios]
-  end
-
-  defp to_csv(%Scenario{
-                job_name: name,
-                input_name: input_name,
-                run_time_statistics: %Statistics{
-                                       ips:           ips,
-                                       average:       average,
-                                       std_dev:       std_dev,
-                                       std_dev_ips:   std_dev_ips,
-                                       std_dev_ratio: std_dev_ratio,
-                                       median:        median,
-                                       minimum:       minimum,
-                                       maximum:       maximum,
-                                       sample_size:   sample_size}}) do
-    [name, input_name, ips, average, std_dev, std_dev_ips, std_dev_ratio,
-     median, minimum, maximum, sample_size]
   end
 end
