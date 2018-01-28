@@ -3,6 +3,7 @@
 ## Features
 
 * raw run times are now also exported, so you can import them in your favorite tool. Thanks `@elpikel`
+* use new csv library version (2.0+)
 
 # 0.7.0 (2017-10-24)
 
