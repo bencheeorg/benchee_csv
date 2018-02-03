@@ -50,7 +50,7 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   defp assert_header(filename) do
     header = filename
              |> File.stream!
-             |> CSV.decode
+             |> CSV.decode!
              |> Enum.take(1)
              |> Enum.at(0)
 
@@ -61,7 +61,7 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   defp assert_value(filename) do
     values = filename
              |> File.stream!
-             |> CSV.decode
+             |> CSV.decode!
              |> Enum.take(2)
              |> Enum.at(1)
 
