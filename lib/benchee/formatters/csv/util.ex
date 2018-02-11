@@ -24,6 +24,15 @@ defmodule Benchee.Formatters.CSV.Util do
 
       iex> Benchee.Formatters.CSV.Util.zip_all([[], [], [4], []])
       [[nil, nil, 4, nil]]
+
+      iex> Benchee.Formatters.CSV.Util.zip_all([])
+      []
+
+      iex> Benchee.Formatters.CSV.Util.zip_all([[]])
+      []
+
+      iex> Benchee.Formatters.CSV.Util.zip_all([[3, 2]])
+      [[3], [2]]
   """
   def zip_all(list_of_lists) do
     do_zip(list_of_lists, [])
