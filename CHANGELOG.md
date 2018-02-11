@@ -1,9 +1,10 @@
-# unreleased
+# 0.8.0 (2018-02-11)
 
 ## Features
 
 * raw run times are now also exported, so you can import them in your favorite tool. Thanks `@elpikel`
 * use new csv library version (2.0+)
+* Support for benchee 0.12's new tags
 
 # 0.7.0 (2017-10-24)
 
