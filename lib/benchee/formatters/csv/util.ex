@@ -31,7 +31,7 @@ defmodule Benchee.Formatters.CSV.Util do
 
   defp do_zip(list_of_lists, acc) do
     converter = fn list, acc -> do_zip_each(list, acc) end
-    {remaining, heads} = :lists.mapfoldl(converter, [], list_of_lists)
+    {remaining, heads} = Enum.map_reduce(list_of_lists, [], converter)
     do_zip_recur(remaining, heads, acc)
   end
 
