@@ -3,7 +3,7 @@ defmodule Benchee.Formatters.CSV do
 
   alias Benchee.Utility.FileCreation
   alias Benchee.{Suite, Configuration}
-  alias Benchee.Formatters.CSV.{Statistics, Raw}
+  alias Benchee.Formatters.CSV.{Statistics, Raw, Util}
 
   @moduledoc """
   Functionality for converting Benchee benchmarking results to CSV so that
@@ -85,8 +85,9 @@ defmodule Benchee.Formatters.CSV do
 
   defp get_benchmarks_raw(scenarios) do
     scenarios
-    |> Enum.map(&Raw.to_csv/1)
-    |> Raw.add_headers(Raw.get_biggest_sample_size(scenarios))
+    |> Enum.map(fn scenario -> scenario.run_times end)
+    |> Util.zip_all
+    |> Raw.add_headers(scenarios)
     |> CSV.encode()
   end
 

@@ -38,8 +38,8 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
         assert_header(@filename)
         assert_value(@filename)
 
-        assert_header(@raw_filename)
-        assert_value(@raw_filename)
+        assert_raw_header(@raw_filename)
+        assert_raw_value(@raw_filename)
       end
     after
       if File.exists?(@filename), do: File.rm!(@filename)
@@ -48,23 +48,37 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   end
 
   defp assert_header(filename) do
-    header = filename
-             |> File.stream!
-             |> CSV.decode!
-             |> Enum.take(1)
-             |> Enum.at(0)
+    header = csv_row_at(filename, 0)
 
     [first_header | _rest] = header
     assert first_header == "Name"
   end
 
   defp assert_value(filename) do
-    values = filename
-             |> File.stream!
-             |> CSV.decode!
-             |> Enum.take(2)
-             |> Enum.at(1)
+    values = csv_row_at(filename, 1)
 
     assert String.to_float(Enum.at(values, 2)) > 0
+  end
+
+  defp csv_row_at(filename, index) do
+    filename
+    |> File.stream!
+    |> CSV.decode!
+    |> Enum.take(index + 1)
+    |> Enum.at(index)
+  end
+
+  defp assert_raw_header(filename) do
+    assert ["Sleep", "Sleep longer"] = csv_row_at(filename, 0)
+  end
+
+  defp assert_raw_value(filename) do
+    raw_values = csv_row_at(filename, 1)
+
+    assert length(raw_values) == 2
+
+    Enum.each raw_values, fn value ->
+      assert String.to_float(value) > 0
+    end
   end
 end

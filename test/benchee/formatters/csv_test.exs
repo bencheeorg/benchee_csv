@@ -5,6 +5,7 @@ defmodule Benchee.Formatters.CSVTest do
   doctest Benchee.Formatters.CSV
   doctest Benchee.Formatters.CSV.Statistics
   doctest Benchee.Formatters.CSV.Raw
+  doctest Benchee.Formatters.CSV.Util
 
   @benchmarks "test.csv"
   @raw_benchmark "test_raw.csv"
