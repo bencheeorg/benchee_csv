@@ -36,7 +36,7 @@ defmodule Benchee.Formatters.CSV do
       iex> suite = %Benchee.Suite{
       ...> 	scenarios: [
       ...> 		%Benchee.Benchmark.Scenario{
-      ...> 			job_name: "My Job",
+      ...> 			name: "My Job",
       ...> 			run_times: [500],
       ...> 			input_name: "Some Input",
       ...> 			input: "Some Input",

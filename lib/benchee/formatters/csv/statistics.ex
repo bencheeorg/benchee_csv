@@ -29,7 +29,7 @@ defmodule Benchee.Formatters.CSV.Statistics do
     ## Examples
       iex> Benchee.Formatters.CSV.Statistics.to_csv(%Benchee.Benchmark.Scenario{
       ...>  input_name: "Some Input",
-      ...>  job_name: "My Job",
+      ...>  name: "My Job",
       ...>  run_time_statistics: %Benchee.Statistics{
       ...>    average: 500.0,
       ...>    ips: 2.0e3,
@@ -47,7 +47,7 @@ defmodule Benchee.Formatters.CSV.Statistics do
       ["My Job", "Some Input", 2.0e3, 500.0, 200.0, 800.0, 0.4, 450.0, 200, 900, 8]
   """
   def to_csv(%Scenario{
-                job_name: name,
+                name: name,
                 input_name: input_name,
                 run_time_statistics: %Statistics{
                                        ips:           ips,

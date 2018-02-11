@@ -31,7 +31,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee,     "~> 0.10"},
+      {:benchee,     "~> 0.12"},
       {:csv,         "~> 2.0"},
       {:excoveralls, "~> 0.8.1", only: :test},
       {:credo,       "~> 0.5",   only: :dev},
