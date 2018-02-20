@@ -98,7 +98,7 @@ defmodule Benchee.Formatters.CSV do
   @doc """
   Uses the return value of `Benchee.Formatters.CSV.format/1` to write the
   statistics output to a CSV file, defined in the initial
-  configuration under `[formatter_options: [csv: [file: \"my.csv\"]].
+  configuration under `[formatter_options: [csv: [file: \"my.csv\"]]`.
   If file is not defined then output is going to be placed in
   "benchmark_output.csv". All raw measurements are placed in raw_benchmark_output.csv.
   """
