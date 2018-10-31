@@ -13,7 +13,7 @@ defmodule BencheeCSV.Mixfile do
      package: package(),
      test_coverage: [tool: ExCoveralls],
      preferred_cli_env: [
-        "coveralls": :test, "coveralls.detail": :test,
+        coveralls: :test, "coveralls.detail": :test,
         "coveralls.post": :test, "coveralls.html": :test,
         "coveralls.travis": :test],
      name: "BencheeCSV",
@@ -31,7 +31,7 @@ defmodule BencheeCSV.Mixfile do
 
   defp deps do
     [
-      {:benchee,     "~> 0.12"},
+      {:benchee, github: "PragTob/benchee"},
       {:csv,         "~> 2.0"},
       {:excoveralls, "~> 0.8.1", only: :test},
       {:credo,       "~> 0.5",   only: :dev},

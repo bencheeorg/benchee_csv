@@ -5,32 +5,31 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   @raw_filename "benchmark_output_raw.csv"
 
   test "works just fine" do
-    basic_test(time: 0.01,
-               warmup: 0.02,
-               formatters: [&Benchee.Formatters.CSV.output/1],
-               formatter_options: [csv: [file: @filename]])
+    basic_test(
+      time: 0.01,
+      warmup: 0.02,
+      formatters: [{Benchee.Formatters.CSV, file: @filename}]
+    )
   end
 
   test "works just fine when filename is not specified" do
-    basic_test(time: 0.01,
-               warmup: 0.02,
-               formatters: [&Benchee.Formatters.CSV.output/1])
-  end
-
-  test "old school configuration still works" do
-    basic_test(time: 0.01,
-               warmup: 0.02,
-               formatters: [&Benchee.Formatters.CSV.output/1],
-               csv: [file: @filename])
+    basic_test(
+      time: 0.01,
+      warmup: 0.02,
+      formatters: [Benchee.Formatters.CSV]
+    )
   end
 
   defp basic_test(configuration) do
     try do
-      capture_io fn ->
-        Benchee.run %{
-          "Sleep"        => fn -> :timer.sleep(10) end,
-          "Sleep longer" => fn -> :timer.sleep(20) end
-        }, configuration
+      capture_io(fn ->
+        Benchee.run(
+          %{
+            "Sleep" => fn -> :timer.sleep(10) end,
+            "Sleep longer" => fn -> :timer.sleep(20) end
+          },
+          configuration
+        )
 
         assert File.exists?(@filename)
         assert File.exists?(@raw_filename)
@@ -40,7 +39,7 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
 
         assert_raw_header(@raw_filename)
         assert_raw_value(@raw_filename)
-      end
+      end)
     after
       if File.exists?(@filename), do: File.rm!(@filename)
       if File.exists?(@raw_filename), do: File.rm!(@raw_filename)
@@ -62,8 +61,8 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
 
   defp csv_row_at(filename, index) do
     filename
-    |> File.stream!
-    |> CSV.decode!
+    |> File.stream!()
+    |> CSV.decode!()
     |> Enum.take(index + 1)
     |> Enum.at(index)
   end
@@ -77,8 +76,8 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
 
     assert length(raw_values) == 2
 
-    Enum.each raw_values, fn value ->
+    Enum.each(raw_values, fn value ->
       assert String.to_float(value) > 0
-    end
+    end)
   end
 end
