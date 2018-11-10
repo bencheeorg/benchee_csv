@@ -92,7 +92,6 @@ defmodule Benchee.Formatters.CSV do
   as a default.
   """
   @spec write({Enumerable.t(), Enumerable.t()}, map | nil) :: :ok
-  def write(data, nil), do: write(data, %{})
   def write({statistics, raw_measurements}, options) do
     filename = Map.get(options, :file, "benchmark_output.csv")
     write(statistics, filename, "statistics")
