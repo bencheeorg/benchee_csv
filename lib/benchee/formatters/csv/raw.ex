@@ -1,31 +1,25 @@
 defmodule Benchee.Formatters.CSV.Raw do
+  @moduledoc """
+  Functionality for converting Benchee scenarios to raw csv.
+  """
+
   alias Benchee.Benchmark.Scenario
 
-  @moduledoc """
-    Functionality for converting Benchee scenarios to raw csv.
-  """
-
-  @doc """
-    Adds headers to given measurements.
-
-    ## Examples
-        iex> alias Benchee.Benchmark.Scenario
-        iex> no_input = Benchee.Benchmark.no_input()
-        iex> scenarios = [
-        ...>   %Scenario{name: "Foo", input_name: "list"},
-        ...>   %Scenario{name: "Bar", input_name: no_input}        
-        ...> ]  
-        iex> Benchee.Formatters.CSV.Raw.add_headers([[100, 200], [101, 201]], scenarios)
-        [["Foo with input list", "Bar"], [100, 200], [101, 201]]
-  """
+  @doc false
   def add_headers(measurements, scenarios) do
     headers =
-      Enum.map(scenarios, fn scenario ->
-        "#{scenario.name}#{input_part(scenario)}"
+      Enum.flat_map(scenarios, fn scenario ->
+        [
+          "#{scenario.name}#{input_part(scenario)} (Run Time Measurements)",
+          "#{scenario.name}#{input_part(scenario)} (Memory Usage Measurements)"
+        ]
       end)
 
     [headers | measurements]
   end
+
+  @doc false
+  def to_csv(scenario), do: [scenario.run_times, scenario.memory_usages]
 
   @no_input Benchee.Benchmark.no_input()
   defp input_part(%Scenario{input_name: nil}), do: ""
