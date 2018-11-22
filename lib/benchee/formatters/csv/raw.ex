@@ -19,9 +19,11 @@ defmodule Benchee.Formatters.CSV.Raw do
         [["Foo with input list", "Bar"], [100, 200], [101, 201]]
   """
   def add_headers(measurements, scenarios) do
-    headers = Enum.map(scenarios, fn scenario ->
-      "#{scenario.name}#{input_part(scenario)}"
-    end)
+    headers =
+      Enum.map(scenarios, fn scenario ->
+        "#{scenario.name}#{input_part(scenario)}"
+      end)
+
     [headers | measurements]
   end
 

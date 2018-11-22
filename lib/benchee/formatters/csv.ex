@@ -21,7 +21,7 @@ defmodule Benchee.Formatters.CSV do
   """
   @behaviour Benchee.Formatter
 
-  alias Benchee.Formatters.CSV.{Statistics, Raw, Util}
+  alias Benchee.Formatters.CSV.{Raw, Statistics, Util}
   alias Benchee.Suite
   alias Benchee.Utility.FileCreation
 

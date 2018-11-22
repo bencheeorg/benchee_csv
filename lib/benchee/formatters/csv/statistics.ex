@@ -1,11 +1,19 @@
 defmodule Benchee.Formatters.CSV.Statistics do
-  alias Benchee.{Statistics, Benchmark.Scenario}
+  alias Benchee.{Benchmark.Scenario, Statistics}
 
-  @column_descriptors ["Name", "Input", "Iterations per Second", "Average",
-                       "Standard Deviation",
-                       "Standard Deviation Iterations Per Second",
-                       "Standard Deviation Ratio", "Median", "Minimum",
-                       "Maximum", "Sample Size"]
+  @column_descriptors [
+    "Name",
+    "Input",
+    "Iterations per Second",
+    "Average",
+    "Standard Deviation",
+    "Standard Deviation Iterations Per Second",
+    "Standard Deviation Ratio",
+    "Median",
+    "Minimum",
+    "Maximum",
+    "Sample Size"
+  ]
   @moduledoc """
     Functionality for converting Benchee scenarios to csv with statistics.
   """
@@ -47,19 +55,32 @@ defmodule Benchee.Formatters.CSV.Statistics do
       ["My Job", "Some Input", 2.0e3, 500.0, 200.0, 800.0, 0.4, 450.0, 200, 900, 8]
   """
   def to_csv(%Scenario{
-                name: name,
-                input_name: input_name,
-                run_time_statistics: %Statistics{
-                                       ips:           ips,
-                                       average:       average,
-                                       std_dev:       std_dev,
-                                       std_dev_ips:   std_dev_ips,
-                                       std_dev_ratio: std_dev_ratio,
-                                       median:        median,
-                                       minimum:       minimum,
-                                       maximum:       maximum,
-                                       sample_size:   sample_size}}) do
-    [name, input_name, ips, average, std_dev, std_dev_ips, std_dev_ratio,
-     median, minimum, maximum, sample_size]
+        name: name,
+        input_name: input_name,
+        run_time_statistics: %Statistics{
+          ips: ips,
+          average: average,
+          std_dev: std_dev,
+          std_dev_ips: std_dev_ips,
+          std_dev_ratio: std_dev_ratio,
+          median: median,
+          minimum: minimum,
+          maximum: maximum,
+          sample_size: sample_size
+        }
+      }) do
+    [
+      name,
+      input_name,
+      ips,
+      average,
+      std_dev,
+      std_dev_ips,
+      std_dev_ratio,
+      median,
+      minimum,
+      maximum,
+      sample_size
+    ]
   end
 end
