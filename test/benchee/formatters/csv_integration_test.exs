@@ -21,29 +21,27 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
   end
 
   defp basic_test(configuration) do
-    try do
-      capture_io(fn ->
-        Benchee.run(
-          %{
-            "Sleep" => fn -> :timer.sleep(10) end,
-            "Sleep longer" => fn -> :timer.sleep(20) end
-          },
-          configuration
-        )
+    capture_io(fn ->
+      Benchee.run(
+        %{
+          "Sleep" => fn -> :timer.sleep(10) end,
+          "Sleep longer" => fn -> :timer.sleep(20) end
+        },
+        configuration
+      )
 
-        assert File.exists?(@filename)
-        assert File.exists?(@raw_filename)
+      assert File.exists?(@filename)
+      assert File.exists?(@raw_filename)
 
-        assert_header(@filename)
-        assert_value(@filename)
+      assert_header(@filename)
+      assert_value(@filename)
 
-        assert_raw_header(@raw_filename)
-        assert_raw_value(@raw_filename)
-      end)
-    after
-      if File.exists?(@filename), do: File.rm!(@filename)
-      if File.exists?(@raw_filename), do: File.rm!(@raw_filename)
-    end
+      assert_raw_header(@raw_filename)
+      assert_raw_value(@raw_filename)
+    end)
+  after
+    if File.exists?(@filename), do: File.rm!(@filename)
+    if File.exists?(@raw_filename), do: File.rm!(@raw_filename)
   end
 
   defp assert_header(filename) do
