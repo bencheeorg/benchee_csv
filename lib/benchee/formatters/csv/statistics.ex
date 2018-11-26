@@ -1,85 +1,98 @@
 defmodule Benchee.Formatters.CSV.Statistics do
+  @moduledoc """
+  Functionality for converting Benchee scenarios to csv with statistics.
+  """
+
   alias Benchee.{Benchmark.Scenario, Statistics}
 
-  @column_descriptors [
+  @headers_without_memory [
     "Name",
     "Input",
     "Iterations per Second",
-    "Average",
-    "Standard Deviation",
     "Standard Deviation Iterations Per Second",
-    "Standard Deviation Ratio",
-    "Median",
-    "Minimum",
-    "Maximum",
-    "Sample Size"
+    "Run Time Average",
+    "Run Time Median",
+    "Run Time Minimum",
+    "Run Time Maximum",
+    "Run Time Standard Deviation",
+    "Run Time Standard Deviation Ratio",
+    "Run Time Sample Size"
   ]
-  @moduledoc """
-    Functionality for converting Benchee scenarios to csv with statistics.
-  """
+  @without_memory_length length(@headers_without_memory)
 
-  @doc """
-    Adds headers to given measurements.
+  @headers_with_memory @headers_without_memory ++
+                         [
+                           "Memory Usage Average",
+                           "Memory Usage Median",
+                           "Memory Usage Minimum",
+                           "Memory Usage Maximum",
+                           "Memory Usage Standard Deviation",
+                           "Memory Usage Standard Deviation Ratio",
+                           "Memory Usage Sample Size"
+                         ]
+  @with_memory_length length(@headers_with_memory)
 
-    ## Examples
-      iex> Benchee.Formatters.CSV.Statistics.add_headers([])
-      [["Name", "Input", "Iterations per Second", "Average", "Standard Deviation",
-      "Standard Deviation Iterations Per Second", "Standard Deviation Ratio",
-      "Median", "Minimum", "Maximum", "Sample Size"]]
-  """
-  def add_headers(measurements) do
-    [@column_descriptors | measurements]
+  @doc false
+  def add_headers([first_row | _] = measurements) do
+    case length(first_row) do
+      @without_memory_length -> [@headers_without_memory | measurements]
+      @with_memory_length -> [@headers_with_memory | measurements]
+    end
   end
 
-  @doc """
-    Converts scenario to csv.
-
-    ## Examples
-      iex> Benchee.Formatters.CSV.Statistics.to_csv(%Benchee.Benchmark.Scenario{
-      ...>  input_name: "Some Input",
-      ...>  name: "My Job",
-      ...>  run_time_statistics: %Benchee.Statistics{
-      ...>    average: 500.0,
-      ...>    ips: 2.0e3,
-      ...>    maximum: 900,
-      ...>    median: 450.0,
-      ...>    minimum: 200,
-      ...>    mode: nil,
-      ...>    percentiles: nil,
-      ...>    sample_size: 8,
-      ...>    std_dev: 200.0,
-      ...>    std_dev_ips: 800.0,
-      ...>    std_dev_ratio: 0.4
-      ...>  }
-      ...>})
-      ["My Job", "Some Input", 2.0e3, 500.0, 200.0, 800.0, 0.4, 450.0, 200, 900, 8]
-  """
+  @doc false
   def to_csv(%Scenario{
         name: name,
         input_name: input_name,
-        run_time_statistics: %Statistics{
-          ips: ips,
-          average: average,
-          std_dev: std_dev,
-          std_dev_ips: std_dev_ips,
-          std_dev_ratio: std_dev_ratio,
-          median: median,
-          minimum: minimum,
-          maximum: maximum,
-          sample_size: sample_size
-        }
+        memory_usage_statistics: memory_usage_statistics,
+        run_time_statistics: run_time_statistics
       }) do
+    [name, input_name] ++
+      to_csv(:run_time, run_time_statistics) ++ to_csv(:memory, memory_usage_statistics)
+  end
+
+  defp to_csv(:memory, %Statistics{
+         average: average,
+         std_dev: std_dev,
+         std_dev_ratio: std_dev_ratio,
+         median: median,
+         minimum: minimum,
+         maximum: maximum,
+         sample_size: sample_size
+       }) do
     [
-      name,
-      input_name,
-      ips,
       average,
-      std_dev,
-      std_dev_ips,
-      std_dev_ratio,
       median,
       minimum,
       maximum,
+      std_dev,
+      std_dev_ratio,
+      sample_size
+    ]
+  end
+
+  defp to_csv(:memory, _), do: []
+
+  defp to_csv(:run_time, %Statistics{
+         ips: ips,
+         average: average,
+         std_dev: std_dev,
+         std_dev_ips: std_dev_ips,
+         std_dev_ratio: std_dev_ratio,
+         median: median,
+         minimum: minimum,
+         maximum: maximum,
+         sample_size: sample_size
+       }) do
+    [
+      ips,
+      std_dev_ips,
+      average,
+      median,
+      minimum,
+      maximum,
+      std_dev,
+      std_dev_ratio,
       sample_size
     ]
   end

@@ -36,6 +36,7 @@ defmodule Benchee.Formatters.CSV do
       ...> 		%Benchee.Benchmark.Scenario{
       ...> 			name: "My Job",
       ...> 			run_times: [500],
+      ...> 			memory_usages: [500],
       ...> 			input_name: "Some Input",
       ...> 			input: "Some Input",
       ...> 			run_time_statistics: %Benchee.Statistics{
@@ -48,6 +49,17 @@ defmodule Benchee.Formatters.CSV do
       ...> 				minimum:       200,
       ...> 				maximum:       900,
       ...> 				sample_size:   8
+      ...> 			},
+      ...> 			memory_usage_statistics: %Benchee.Statistics{
+      ...> 				average:       500.0,
+      ...> 				ips:           nil,
+      ...> 				std_dev:       200.0,
+      ...> 				std_dev_ratio: 0.4,
+      ...> 				std_dev_ips:   nil,
+      ...> 				median:        450.0,
+      ...> 				minimum:       200,
+      ...> 				maximum:       900,
+      ...> 				sample_size:   8
       ...> 			}
       ...> 		}
       ...> 	]
@@ -56,9 +68,10 @@ defmodule Benchee.Formatters.CSV do
       iex> |> Benchee.Formatters.CSV.format(%{})
       iex> |> elem(0)
       iex> |> (fn rows -> Enum.take(rows, 2) end).()
-      ["Name,Input,Iterations per Second,Average,Standard Deviation,Standard Deviation Iterations Per Second,Standard Deviation Ratio,Median,Minimum,Maximum,Sample Size\\r\\n",
-       "My Job,Some Input,2.0e3,500.0,200.0,800.0,0.4,450.0,200,900,8\\r\\n"]
-
+      [
+        "Name,Input,Iterations per Second,Standard Deviation Iterations Per Second,Run Time Average,Run Time Median,Run Time Minimum,Run Time Maximum,Run Time Standard Deviation,Run Time Standard Deviation Ratio,Run Time Sample Size,Memory Usage Average,Memory Usage Median,Memory Usage Minimum,Memory Usage Maximum,Memory Usage Standard Deviation,Memory Usage Standard Deviation Ratio,Memory Usage Sample Size\\r\\n",
+        "My Job,Some Input,2.0e3,800.0,500.0,450.0,200,900,200.0,0.4,8,500.0,450.0,200,900,200.0,0.4,8\\r\\n"
+      ]
   """
   @spec format(Suite.t(), any) :: {Enumerable.t(), Enumerable.t()}
   def format(%Suite{scenarios: scenarios}, _) do
@@ -76,7 +89,7 @@ defmodule Benchee.Formatters.CSV do
 
   defp get_benchmarks_raw(scenarios) do
     scenarios
-    |> Enum.map(fn scenario -> scenario.run_times end)
+    |> Enum.flat_map(&Raw.to_csv/1)
     |> Util.zip_all()
     |> Raw.add_headers(scenarios)
     |> CSV.encode()
