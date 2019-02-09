@@ -5,5 +5,5 @@ Benchee.run(%{
   "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
   "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
 },
-  formatters: [Benchee.Formatters.CSV],
-  formatter_options: [csv: [file: "my.csv"]])
+  formatters: [{Benchee.Formatters.CSV, file: "my.csv"}]
+)
