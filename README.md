@@ -20,27 +20,26 @@ Afterwards, run `mix deps.get` to install it.
 
 ## Usage
 
-Simply configure `Benchee.Formatters.CSV.output/1` as one of the formatters for `Benchee.run/2` along with the `%{csv: %{file: "my_file.csv"}}` option as to where to save the csv file:
+Simply configure `Benchee.Formatters.CSV` as one of the formatters for `Benchee.run/2` along with the file path you want the output to go (otherwise defaults to "benchmark_output.csv"):
 
 ```elixir
 list = Enum.to_list(1..10_000)
-map_fun = fn(i) -> [i, i * i] end
+map_fun = fn i -> [i, i * i] end
 
-Benchee.run(%{
-  "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
-  "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
-},
+Benchee.run(
+  %{
+    "flat_map" => fn -> Enum.flat_map(list, map_fun) end,
+    "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten() end
+  },
   formatters: [
-    Benchee.Formatters.CSV,
+    {Benchee.Formatters.CSV, file: "my.csv"},
     Benchee.Formatters.Console
-  ],
-  formatter_options: [csv: [file: "my.csv"]])
-
+  ]
 ```
 
-The sample defines both the standard console formatter and the CSV formatter, if you don't care about the console output you can also only define the CSV formatter.
+The sample defines both the standard console formatter and the CSV formatter, if you don't care about the console output you can just delet that line.
 
-You can also use the more verbose and versatile API of Benchee. When it comes to formatting just use `Benchee.Formatters.CSV.format` and then write it to a file (taking into account the new input structure). Check out the [samples directory](https://github.com/PragTob/benchee_csv/tree/master/samples) for the verbose samples to see how it's done.
+You can also use the more verbose and versatile API of Benchee. When it comes to formatting just use `Benchee.Formatters.CSV.format/2` and then write it to a file (taking into account the new input structure). Check out the [samples directory](https://github.com/PragTob/benchee_csv/tree/master/samples) for the verbose samples to see how it's done.
 
 ## Contributing
 

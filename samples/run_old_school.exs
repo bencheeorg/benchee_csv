@@ -1,14 +1,20 @@
 # It is possible to use multiple formatters so that you have both the Console
 # output and a csv file.
 list = Enum.to_list(1..10_000)
-map_fun = fn(i) -> [i, i * i] end
+map_fun = fn i -> [i, i * i] end
 
-Benchee.run(%{
-  "flat_map"    => fn -> Enum.flat_map(list, map_fun) end,
-  "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten end
-},
+Benchee.run(
+  %{
+    "flat_map" => fn -> Enum.flat_map(list, map_fun) end,
+    "map.flatten" => fn -> list |> Enum.map(map_fun) |> List.flatten() end
+  },
   formatters: [
-    &Benchee.Formatters.CSV.output/1,
-    &Benchee.Formatters.Console.output/1
+    fn suite ->
+      suite
+      |> Benchee.Formatters.CSV.format(%{})
+      |> Benchee.Formatters.CSV.write(%{file: "my.csv"})
+    end
   ],
-  formatter_options: [csv: [file: "my.csv"]])
+  warmup: 0.1,
+  time: 0.1
+)
