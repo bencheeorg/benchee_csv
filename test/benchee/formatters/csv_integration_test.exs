@@ -22,6 +22,25 @@ defmodule Benchee.Formatters.CSVIntegrationTest do
     )
   end
 
+  test "doesn't blow up if we gather no data" do
+    capture_io(fn ->
+      assert %Benchee.Suite{} =
+               Benchee.run(
+                 %{
+                   "Sleep" => fn -> :timer.sleep(10) end,
+                   "List" => fn -> [:rand.uniform()] end
+                 },
+                 time: 0,
+                 warmup: 0,
+                 memory_time: 0,
+                 formatters: [Benchee.Formatters.CSV]
+               )
+    end)
+  after
+    if File.exists?(@filename), do: File.rm!(@filename)
+    if File.exists?(@raw_filename), do: File.rm!(@raw_filename)
+  end
+
   defp basic_test(configuration) do
     capture_io(fn ->
       Benchee.run(
