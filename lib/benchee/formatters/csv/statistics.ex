@@ -3,7 +3,7 @@ defmodule Benchee.Formatters.CSV.Statistics do
   Functionality for converting Benchee scenarios to csv with statistics.
   """
 
-  alias Benchee.{Benchmark.Scenario, Statistics}
+  alias Benchee.{Scenario, Statistics}
 
   @headers_without_memory [
     "Name",
@@ -44,8 +44,8 @@ defmodule Benchee.Formatters.CSV.Statistics do
   def to_csv(%Scenario{
         name: name,
         input_name: input_name,
-        memory_usage_statistics: memory_usage_statistics,
-        run_time_statistics: run_time_statistics
+        memory_usage_data: %{statistics: memory_usage_statistics},
+        run_time_data: %{statistics: run_time_statistics}
       }) do
     [name, input_name] ++
       to_csv(:run_time, run_time_statistics) ++ to_csv(:memory, memory_usage_statistics)
