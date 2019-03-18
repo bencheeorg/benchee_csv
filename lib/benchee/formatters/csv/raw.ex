@@ -3,7 +3,7 @@ defmodule Benchee.Formatters.CSV.Raw do
   Functionality for converting Benchee scenarios to raw csv.
   """
 
-  alias Benchee.Benchmark.Scenario
+  alias Benchee.Scenario
 
   @doc false
   def add_headers(measurements, scenarios) do
@@ -19,7 +19,7 @@ defmodule Benchee.Formatters.CSV.Raw do
   end
 
   @doc false
-  def to_csv(scenario), do: [scenario.run_times, scenario.memory_usages]
+  def to_csv(scenario), do: [scenario.run_time_data.samples, scenario.memory_usage_data.samples]
 
   @no_input Benchee.Benchmark.no_input()
   defp input_part(%Scenario{input_name: nil}), do: ""

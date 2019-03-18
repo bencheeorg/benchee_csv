@@ -33,33 +33,37 @@ defmodule Benchee.Formatters.CSV do
 
       iex> suite = %Benchee.Suite{
       ...> 	scenarios: [
-      ...> 		%Benchee.Benchmark.Scenario{
+      ...> 		%Benchee.Scenario{
       ...> 			name: "My Job",
-      ...> 			run_times: [500],
-      ...> 			memory_usages: [500],
       ...> 			input_name: "Some Input",
       ...> 			input: "Some Input",
-      ...> 			run_time_statistics: %Benchee.Statistics{
-      ...> 				average:       500.0,
-      ...> 				ips:           2000.0,
-      ...> 				std_dev:       200.0,
-      ...> 				std_dev_ratio: 0.4,
-      ...> 				std_dev_ips:   800.0,
-      ...> 				median:        450.0,
-      ...> 				minimum:       200,
-      ...> 				maximum:       900,
-      ...> 				sample_size:   8
+      ...> 			run_time_data: %Benchee.CollectionData{
+      ...>        samples: [500],
+      ...>        statistics: %Benchee.Statistics{
+      ...> 				  average:       500.0,
+      ...> 				  ips:           2000.0,
+      ...> 				  std_dev:       200.0,
+      ...> 				  std_dev_ratio: 0.4,
+      ...> 				  std_dev_ips:   800.0,
+      ...> 				  median:        450.0,
+      ...> 				  minimum:       200,
+      ...> 				  maximum:       900,
+      ...> 				  sample_size:   8
+      ...>        }
       ...> 			},
-      ...> 			memory_usage_statistics: %Benchee.Statistics{
-      ...> 				average:       500.0,
-      ...> 				ips:           nil,
-      ...> 				std_dev:       200.0,
-      ...> 				std_dev_ratio: 0.4,
-      ...> 				std_dev_ips:   nil,
-      ...> 				median:        450.0,
-      ...> 				minimum:       200,
-      ...> 				maximum:       900,
-      ...> 				sample_size:   8
+      ...> 			memory_usage_data: %Benchee.CollectionData{
+      ...>        samples: [500],
+      ...>        statistics: %Benchee.Statistics{
+      ...> 				  average:       500.0,
+      ...> 				  ips:           nil,
+      ...> 				  std_dev:       200.0,
+      ...> 				  std_dev_ratio: 0.4,
+      ...> 				  std_dev_ips:   nil,
+      ...> 				  median:        450.0,
+      ...> 				  minimum:       200,
+      ...> 				  maximum:       900,
+      ...> 				  sample_size:   8
+      ...>        }
       ...> 			}
       ...> 		}
       ...> 	]
