@@ -9,6 +9,7 @@ map_fun = fn i -> [i, i * i] end
   "map.flatten",
   fn -> list |> Enum.map(map_fun) |> List.flatten() end
 )
-|> Benchee.measure()
+|> Benchee.collect()
 |> Benchee.statistics()
+|> Benchee.relative_statistics()
 |> Benchee.Formatter.output()
