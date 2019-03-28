@@ -1,3 +1,7 @@
+## 1.0.0 (2019-03-28)
+
+Compatibility with benchee 0.99.0 and 1.0.0.
+
 ## 0.9.0 (2019-02-10)
 
 ### Features
