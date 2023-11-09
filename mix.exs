@@ -30,7 +30,7 @@ defmodule BencheeCSV.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :benchee, :csv]]
+    []
   end
 
   defp deps do
