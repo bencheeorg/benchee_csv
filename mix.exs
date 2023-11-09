@@ -37,11 +37,11 @@ defmodule BencheeCSV.Mixfile do
     [
       {:benchee, ">= 0.99.0 and < 2.0.0"},
       {:csv, "~> 2.0"},
-      {:excoveralls, "~> 0.10.0", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
       {:credo, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.11", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
-      {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false}
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false}
     ]
   end
 
